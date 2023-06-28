@@ -39,10 +39,8 @@ moneyManager.addMoneyCallback = (addMoney = {currency: null, amount: null}) => {
   ApiConnector.addMoney(addMoney, (response) => {
     if (response.success) {
       ProfileWidget.showProfile(response.data)
-      favoritesWidget.setMessage(false, `Вам успешно добавлено ${addMoney.amount} ${addMoney.currency}`);
-    } else {
-      favoritesWidget.setMessage(true, response.data)
-    }      
+    }
+    moneyManager.setMessage(response.success, response.error || `Вам успешно добавлено ${addMoney.amount} ${addMoney.currency}`)
   })
 }
 
@@ -51,10 +49,8 @@ moneyManager.conversionMoneyCallback = (convertMoney = {fromCurrency: null, targ
   ApiConnector.convertMoney(convertMoney, (response) => {
     if (response.success) {
       ProfileWidget.showProfile(response.data)
-      favoritesWidget.setMessage(false, `Вы конвертировали ${convertMoney.fromAmount} ${convertMoney.fromCurrency} в ${convertMoney.targetCurrency}`)
-    } else {
-      favoritesWidget.setMessage(true, response.data)
     }
+    moneyManager.setMessage(response.success, response.error || `Вы конвертировали ${convertMoney.fromAmount} ${convertMoney.fromCurrency} в ${convertMoney.targetCurrency}`)
   })
 }
 
@@ -63,10 +59,8 @@ moneyManager.sendMoneyCallback = (transferMoney= {to: null, currency: null, amou
   ApiConnector.transferMoney(transferMoney, (response) => {
     if (response.success) {
       ProfileWidget.showProfile(response.data)
-      favoritesWidget.setMessage(false, `Вы успешно перевели пользователю  ${transferMoney.to} ${transferMoney.amount}  ${transferMoney.currency}`)
-    } else {
-      favoritesWidget.setMessage(true, response.data)
     }
+    moneyManager.setMessage(response.success, response.error || `Вы успешно перевели пользователю  ${transferMoney.to} ${transferMoney.amount}  ${transferMoney.currency}`)
   })
 }
 
@@ -80,7 +74,7 @@ ApiConnector.getFavorites((response) => {
     favoritesWidget.fillTable(response.data);
     moneyManager.updateUsersList(response.data);
   } else {
-    favoritesWidget.setMessage(true, response.data)
+    favoritesWidget.setMessage(response.success, response.error)
   }   
 })
 
@@ -91,10 +85,8 @@ favoritesWidget.addUserCallback = (addUserToFavorites = {id: null, name: null}) 
       favoritesWidget.clearTable();
       favoritesWidget.fillTable(response.data);
       moneyManager.updateUsersList(response.data);
-      favoritesWidget.setMessage(false, `Пользователь ${addUserToFavorites.name} успешно добавлен в избранные`)
-    } else {
-      favoritesWidget.setMessage(true, response.data)
-    }  
+    }
+    favoritesWidget.setMessage(response.success, response.error || `Пользователь ${addUserToFavorites.name} успешно добавлен в избранные`)
   })
 }
 
@@ -105,9 +97,7 @@ favoritesWidget.removeUserCallback = (idUser) => {
       favoritesWidget.clearTable();
       favoritesWidget.fillTable(response.data);
       moneyManager.updateUsersList(response.data);
-      favoritesWidget.setMessage(false, `Пользователь  успешно удален из избранных`)
-    } else {
-      favoritesWidget.setMessage(true, response.data)
-    }  
+    }
+    favoritesWidget.setMessage(response.success, response.error || `Пользователь  успешно удален из избранных`)
   })
 }
