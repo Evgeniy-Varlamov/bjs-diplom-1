@@ -2,22 +2,22 @@
 
 const userForm = new UserForm();
 // Авторизация
-userForm.loginFormCallback = (data = {login: null, password: null}) => {
+userForm.loginFormCallback = (data) => {
   ApiConnector.login(data, (response)=>{
     if (response.success) {
       location.reload();
     } else {
-      alert(response.data);
+      userForm.setLoginErrorMessage(response.error);
     }
   })
 }
 // Регистрация
-userForm.registerFormCallback = (data = {login: null, password: null}) => {
+userForm.registerFormCallback = (data) => {
   ApiConnector.register(data, (response)=>{
     if (response.success) {
       location.reload();
     } else {
-      alert(response.data);
+      userForm.setRegisterErrorMessage(response.error);
     }
   })
 }
